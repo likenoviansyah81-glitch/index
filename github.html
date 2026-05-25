@@ -3,161 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Opening O2SN 2026 - Lubuklinggau Selatan I</title>
+    <title>Pengumuman Kelulusan Kelas 6 SD</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Gaya dasar tetap sama seperti sebelumnya */
-        body {
-            margin: 0;
-            background: #001a33;
-            color: white;
-            font-family: 'Arial', sans-serif;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-
-        #status-text {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-align: center;
-        }
-
-        .palm-container {
-            position: relative;
-            width: 280px;
-            height: 380px;
-            border: 3px solid rgba(0, 255, 255, 0.3);
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .palm-container:active {
-            transform: scale(0.98);
-            border-color: #00fbff;
-        }
-
-        .palm-icon {
-            width: 100%;
-            height: 100%;
-            fill: #00d4ff;
-            opacity: 0.4;
-        }
-
-        .scanner-line {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 8px;
-            background: #00fbff;
-            box-shadow: 0 0 20px #00fbff;
-            display: none;
-        }
-
-        @keyframes scan {
-            0% { top: 0; }
-            100% { top: 100%; }
-        }
-
-        .success-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, #004466 0%, #000 100%);
-            z-index: 10;
-            text-align: center;
-            padding-top: 5%;
-        }
-
-        .success-overlay h1 { font-size: 6rem; margin: 10px 0; color: white; }
-        .success-overlay h2 { font-size: 2.5rem; color: #00fbff; }
-        .success-overlay h3 { font-size: 2rem; color: #ffd700; margin-bottom: 0; }
-
-        .confetti {
-            animation: zoomIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes zoomIn {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+        .bg-gradient {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 font-sans min-h-screen flex flex-col justify-between">
 
-    <h2 id="status-text">TEKAN DAN TAHAN<br>UNTUK MEMBUKA ACARA</h2>
+    <header class="bg-gradient text-white py-6 shadow-md text-center">
+        <h1 class="text-2xl md:text-3xl font-bold uppercase tracking-wide">Sistem Informasi Kelulusan</h1>
+        <p class="text-sm md:text-base opacity-90 mt-1">Siswa Kelas 6 Sekolah Dasar | Tahun Ajaran 2025/2026</p>
+    </header>
 
-    <div class="palm-container" id="palmTrigger">
-        <svg class="palm-icon" viewBox="0 0 24 24"><path d="M12,2A1,1 0 0,1 13,3V11.29L15.71,14.29L17.12,12.88L13,8.76V5H15V8.26L19.5,12.76L18.09,14.17L15,11.08V21H9V11.08L5.91,14.17L4.5,12.76L9,8.26V2H11V3A1,1 0 0,1 12,2M11,13V21H13V13H11Z" /></svg>
-        <div class="scanner-line" id="scanner"></div>
-    </div>
+    <main class="flex-grow flex items-center justify-center p-4">
+        
+        <div id="login-section" class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md transition-all duration-300">
+            <div class="text-center mb-6">
+                <div class="inline-block p-4 bg-blue-50 text-blue-600 rounded-full mb-3">
+                    <i class="fa-solid fa-graduation-cap text-4xl"></i>
+                </div>
+                <h2 class="text-xl font-bold text-gray-850">Cek Status Kelulusan</h2>
+                <p class="text-gray-500 text-sm mt-1">Masukkan Nomor Induk Siswa (NIS) Anda dengan benar.</p>
+            </div>
 
-    <div id="musicPlayer" style="display:none"></div>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="mb-5">
+                    <label for="nis-input" class="block text-sm font-semibold text-gray-700 mb-2">Nomor Induk Siswa (NIS)</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" id="nis-input" required placeholder="Contoh: 1234" 
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                    </div>
+                    <p id="error-message" class="text-red-500 text-xs mt-2 hidden">NIS tidak ditemukan! Periksa kembali nomor Anda.</p>
+                </div>
 
-    <div class="success-overlay" id="successScreen">
-        <div class="confetti">
-            <h3>DENGAN RAHMAT TUHAN YME</h3>
-            <h1>O2SN 2026</h1>
-            <h2>LUBUKLINGGAU SELATAN I</h2>
-            <h1 style="color: #ffd700; font-size: 4rem;">RESMI DIBUKA</h1>
-            <p style="font-size: 1.5rem; margin-top: 30px;">"Sportivitas Adalah Jati Diri Kami"</p>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg shadow-md transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-magnifying-glass"></i> Periksa Kelulusan
+                </button>
+            </form>
         </div>
-    </div>
+
+        <div id="result-section" class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-2xl hidden transition-all duration-300">
+            <div class="text-center border-b border-gray-200 pb-4 mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Surat Keterangan Kelulusan Mandiri</h2>
+                <p class="text-sm text-gray-500">Hasil evaluasi belajar akhir tingkat Sekolah Dasar</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm text-gray-700">
+                <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                    <span class="block text-gray-400 text-xs uppercase font-semibold">Nama Lengkap</span>
+                    <strong id="res-nama" class="text-base text-gray-800">-</strong>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                    <span class="block text-gray-400 text-xs uppercase font-semibold">Nomor Induk Siswa (NIS)</span>
+                    <strong id="res-nis" class="text-base text-gray-800">-</strong>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                    <span class="block text-gray-400 text-xs uppercase font-semibold">Tempat, Tanggal Lahir</span>
+                    <strong id="res-ttl" class="text-base text-gray-800">-</strong>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                    <span class="block text-gray-400 text-xs uppercase font-semibold">Kelas</span>
+                    <strong id="res-kelas" class="text-base text-gray-800">6 (Enam)</strong>
+                </div>
+            </div>
+
+            <div id="status-box" class="text-center p-6 rounded-xl mb-6">
+                <p class="text-sm uppercase tracking-wider font-semibold opacity-90">Dinyatakan</p>
+                <h3 id="res-status" class="text-3xl font-extrabold my-1">-</h3>
+                <p id="res-note" class="text-xs mt-2 opacity-90"></p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-between items-center">
+                <button onclick="logout()" class="w-full sm:w-auto px-5 py-2.5 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors cursor-pointer text-sm">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+                </button>
+                <button onclick="window.print()" class="w-full sm:w-auto px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors cursor-pointer text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-print"></i> Cetak Bukti Kelulusan
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 text-center py-4 text-xs border-t border-gray-700">
+        <p>&copy; 2026 Panitia Kelulusan Kelas 6 SD. All Rights Reserved.</p>
+    </footer>
 
     <script>
-        const trigger = document.getElementById('palmTrigger');
-        const scanner = document.getElementById('scanner');
-        const successScreen = document.getElementById('successScreen');
-        const statusText = document.getElementById('status-text');
-        
-        let scanTimer;
+        // --- DATA DATABASE SISWA (Silahkan edit atau tambah di sini) ---
+        const databaseSiswa = [
+            { nis: "1234", nama: "Ahmad Fauzi", ttl: "Jakarta, 12 April 2014", status: "LULUS", catatan: "Selamat! Pertahankan prestasimu di jenjang SMP." },
+            { nis: "1235", nama: "Siti Aminah", ttl: "Bandung, 23 Mei 2014", status: "LULUS", catatan: "Selamat! Sukses selalu untuk jenjang pendidikan berikutnya." },
+            { nis: "1236", nama: "Budi Santoso", ttl: "Medan, 05 Agustus 2013", status: "LULUS", catatan: "Selamat! Semangat belajar di sekolah yang baru." },
+            { nis: "1237", nama: "Rian Hidayat", ttl: "Surabaya, 19 Desember 2014", status: "TIDAK LULUS", catatan: "Jangan berkecil hati, silakan hubungi wali kelas Anda di sekolah." }
+        ];
 
-        // Fungsi Memulai Scan
-        function startScan(e) {
-            e.preventDefault();
-            scanner.style.display = 'block';
-            scanner.style.animation = 'scan 1.5s infinite linear';
-            statusText.innerText = 'MEMVERIFIKASI...';
-            statusText.style.color = '#00fbff';
+        // Fungsi Menangani Proses Login / Pencarian NIS
+        function handleLogin(event) {
+            event.preventDefault(); // Mencegah reload halaman
             
-            // Scan selama 2.5 detik sebelum terbuka
-            scanTimer = setTimeout(showSuccess, 2500);
-        }
-
-        // Fungsi Membatalkan jika tangan dilepas
-        function cancelScan() {
-            clearTimeout(scanTimer);
-            scanner.style.display = 'none';
-            scanner.style.animation = 'none';
-            statusText.innerText = 'TEKAN DAN TAHAN\nUNTUK MEMBUKA ACARA';
-            statusText.style.color = 'white';
-        }
-
-        function showSuccess() {
-            successScreen.style.display = 'block';
+            const inputNis = document.getElementById('nis-input').value.trim();
+            const errorMsg = document.getElementById('error-message');
             
-            // Memutar Lagu Tararara (Zhao Lei - Trumpet)
-            // Menggunakan YouTube Embed Autoplay
-            const videoId = 'dZYC1Dk8O88';
-            const player = document.getElementById('musicPlayer');
-            player.innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allow="autoplay"></iframe>`;
+            // Cari data siswa berdasarkan NIS
+            const siswa = databaseSiswa.find(s => s.nis === inputNis);
+
+            if (siswa) {
+                // Sembunyikan error jika sebelumnya ada
+                errorMsg.classList.add('hidden');
+                
+                // Isi data ke halaman hasil
+                document.getElementById('res-nama').innerText = siswa.nama;
+                document.getElementById('res-nis').innerText = siswa.nis;
+                document.getElementById('res-ttl').innerText = siswa.ttl;
+                document.getElementById('res-status').innerText = siswa.status;
+                document.getElementById('res-note').innerText = siswa.catatan;
+
+                // Atur warna tampilan box status berdasarkan kelulusan
+                const statusBox = document.getElementById('status-box');
+                if (siswa.status === "LULUS") {
+                    statusBox.className = "text-center p-6 rounded-xl mb-6 bg-green-100 text-green-800 border-2 border-green-300";
+                } else {
+                    statusBox.className = "text-center p-6 rounded-xl mb-6 bg-red-100 text-red-800 border-2 border-red-300";
+                }
+
+                // Pindah Tampilan Halaman (Sembunyikan login, munculkan hasil)
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('result-section').classList.remove('hidden');
+            } else {
+                // Tampilkan pesan error jika NIS tidak ada
+                errorMsg.classList.remove('hidden');
+            }
         }
 
-        // Event Listeners
-        trigger.addEventListener('mousedown', startScan);
-        trigger.addEventListener('touchstart', startScan);
-        window.addEventListener('mouseup', cancelScan);
-        window.addEventListener('touchend', cancelScan);
+        // Fungsi untuk Kembali ke Halaman Login
+        function logout() {
+            document.getElementById('nis-input').value = '';
+            document.getElementById('result-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+        }
     </script>
 </body>
 </html>
